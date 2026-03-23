@@ -374,7 +374,7 @@ hiddenInput.addEventListener("input", (e) => {
   characters[charIndex].classList.remove("active");
   charIndex++; totalKeystrokes++;
 
-  if (charIndex < characters.length) {
+  if (charIndex < charactersv.length) {
     const nextChar = characters[charIndex];
     nextChar.classList.add("active");
     // Rule G: Auto-scroll
