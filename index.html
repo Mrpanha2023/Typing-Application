@@ -6,26 +6,26 @@
 <title>Electronic Typing | by mrpanha</title>
 
 <meta property="og:title" content="Electronic Typing | Pro 2026" />
-<meta property="og:description" content="Immersive HUD-Bento typing simulator with high-precision metrics. Designed by mrpanha." />
+<meta property="og:description" content="High-precision Vaporwave typing simulator featuring Bento-HUD architecture." />
 <meta property="og:type" content="website" />
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
   :root {
-    --neon-pink: #FF33CC;
-    --neon-pink-glow: rgba(255, 51, 204, 0.15); /* Rule H: 15% branding glow */
-    --electric-blue: #00CCFF;
-    --deep-purple: #26004D;
-    --dark-navy: #0A001F;
-    --cyan-glow: #66FFFF;
-    --glass: rgba(10, 0, 31, 0.85);
+    --vp-pink: #ff71ce;
+    --vp-pink-15: rgba(255, 113, 206, 0.15); /* 15% Branding Glow */
+    --vp-blue: #01cdfe;
+    --vp-cyan: #05ffa1;
+    --vp-purple: #b967ff;
+    --vp-dark: #1a0033;
+    --glass: rgba(26, 0, 51, 0.85);
   }
 
   * { box-sizing: border-box; }
 
   body {
-    background-color: var(--dark-navy);
+    background-color: var(--vp-dark);
     color: white;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
@@ -34,216 +34,233 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    perspective: 1000px;
   }
 
-  /* Rule L: ANIMATED HUD BACKGROUND */
- .bg-grid {
+  /* VINTAGE VAPORWAVE SCENE */
+.sky {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-      linear-gradient(var(--deep-purple) 1px, transparent 1px),
-      linear-gradient(90deg, var(--deep-purple) 1px, transparent 1px);
-    background-size: 50px 50px;
-    background-position: center;
+    background: linear-gradient(to bottom, #1a0033 0%, #4a0080 50%, #ff71ce 100%);
+    z-index: -3;
+  }
+
+.sun {
+    position: fixed;
+    top: 35%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 380px; height: 380px;
+    background: linear-gradient(to bottom, #ffea00 0%, #ff71ce 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 100px rgba(255, 113, 206, 0.5);
     z-index: -2;
-    animation: grid-scroll 20s linear infinite;
+    -webkit-mask-image: linear-gradient(to bottom, 
+      black 0%, black 15%, transparent 15%, transparent 18%,
+      black 18%, black 35%, transparent 35%, transparent 40%,
+      black 40%, black 60%, transparent 60%, transparent 68%,
+      black 68%, black 85%, transparent 85%, transparent 95%
+    );
   }
 
- .scanlines {
+.grid-floor {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-    background-size: 100% 4px, 3px 100%;
-    pointer-events: none;
-    z-index: 100;
+    bottom: -150px; left: -50%; width: 200%; height: 60%;
+    background-image: 
+      linear-gradient(transparent 0%, var(--vp-blue) 1px, transparent 1px),
+      linear-gradient(90deg, transparent 0%, var(--vp-blue) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: rotateX(60deg);
+    z-index: -1;
+    animation: grid-move 2.5s linear infinite;
   }
 
-  @keyframes grid-scroll {
-    from { transform: translateY(0); }
-    to { transform: translateY(50px); }
+  @keyframes grid-move {
+    from { background-position: 0 0; }
+    to { background-position: 0 60px; }
   }
 
- .main-layout {
-    width: 900px;
+.main-layout {
+    width: 950px;
     position: relative;
     z-index: 10;
   }
 
-  /* Rule H: Visual Identity and Attribution */
- .branding-wrapper {
+  /* BRANDING & IDENTITY */
+.branding {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 35px;
   }
 
- .main-title {
+.main-title {
     margin: 0;
-    font-size: 4.5rem;
+    font-size: 4.2rem;
     font-weight: 900;
-    color: var(--neon-pink);
+    color: white;
     text-transform: uppercase;
-    letter-spacing: 10px;
-    text-shadow: 0 0 15px var(--neon-pink-glow), 0 0 30px var(--neon-pink-glow);
+    letter-spacing: 12px;
+    font-style: italic;
+    /* Rule H: Subtle Glow shadow */
+    text-shadow: 3px 3px 0px var(--vp-blue), 0 0 20px var(--vp-pink-15);
   }
 
- .credit-text {
+.credit-text {
     text-align: right;
     font-size: 0.9rem;
-    color: var(--cyan-glow);
+    color: var(--vp-cyan);
+    margin-top: -12px;
+    padding-right: 40px;
+    letter-spacing: 4px;
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--vp-cyan);
     font-style: italic;
-    margin-top: -10px;
-    padding-right: 20px;
-    letter-spacing: 2px;
   }
 
-  /* Rule L: BENTO CARD CONTAINER */
- .bento-container {
+  /* HUD-BENTO GLASS INTERFACE */
+.bento-container {
     background: var(--glass);
-    backdrop-filter: blur(20px);
-    border-radius: 30px;
-    padding: 40px;
-    border: 1px solid rgba(102, 255, 255, 0.2);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    backdrop-filter: blur(25px);
+    border-radius: 25px;
+    padding: 45px;
+    border: 2px solid var(--vp-pink);
+    box-shadow: 0 0 30px rgba(255, 113, 206, 0.3);
     position: relative;
   }
 
-  /* HUD CORNERS */
- .bento-container::before,.bento-container::after {
+  /* HUD CARD CORNER BRACKETS */
+.bento-container::before,.bento-container::after {
     content: '';
     position: absolute;
-    width: 30px; height: 30px;
-    border: 2px solid var(--electric-blue);
+    width: 40px; height: 40px;
+    border: 3px solid var(--vp-cyan);
     pointer-events: none;
   }
- .bento-container::before { top: -5px; left: -5px; border-right: 0; border-bottom: 0; }
- .bento-container::after { bottom: -5px; right: -5px; border-left: 0; border-top: 0; }
+.bento-container::before { top: -8px; left: -8px; border-right: 0; border-bottom: 0; }
+.bento-container::after { bottom: -8px; right: -8px; border-left: 0; border-top: 0; }
 
- .stats-hud {
+.stats-hud {
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
   }
 
- .stat-card {
+.stat-card {
     background: rgba(255, 255, 255, 0.03);
-    padding: 15px 25px;
-    border-radius: 15px;
-    border-left: 3px solid var(--electric-blue);
+    padding: 12px 30px;
+    border-radius: 12px;
+    border-left: 4px solid var(--vp-blue);
   }
 
- .stat-value {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--cyan-glow);
-    display: block;
-  }
+.stat-val { font-size: 1.6rem; font-weight: bold; color: var(--vp-cyan); display: block; }
+.stat-lbl { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
 
- .stat-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    color: var(--electric-blue);
-    letter-spacing: 2px;
-  }
-
- .level-selector {
+.level-nav {
     display: flex;
     gap: 12px;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
   }
 
- .lvl-btn {
+.lvl-btn {
     flex: 1;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(0, 204, 255, 0.3);
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
+    border: 1px solid rgba(1, 205, 254, 0.4);
+    color: var(--vp-blue);
+    padding: 12px;
+    border-radius: 8px;
     cursor: pointer;
     text-transform: uppercase;
     font-size: 0.75rem;
-    transition: 0.3s ease;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
- .lvl-btn.active {
-    background: var(--electric-blue);
-    color: var(--dark-navy);
-    font-weight: bold;
-    box-shadow: 0 0 20px rgba(0, 204, 255, 0.4);
+.lvl-btn.active {
+    background: var(--vp-blue);
+    color: var(--vp-dark);
+    font-weight: 900;
+    box-shadow: 0 0 20px var(--vp-blue);
+    transform: translateY(-2px);
   }
 
-  /* Rule G: Viewport Adaptation [1, 2] */
+  /* SCROLLABLE VIEWPORT */
   #wordDisplay {
-    font-size: 26px;
+    font-size: 28px;
     line-height: 1.8;
     height: 220px;
     overflow-y: auto;
-    padding-right: 20px;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255, 255, 255, 0.3);
     scroll-behavior: smooth;
     user-select: none;
+    padding-right: 15px;
   }
 
   #wordDisplay::-webkit-scrollbar { width: 4px; }
-  #wordDisplay::-webkit-scrollbar-thumb { background: var(--neon-pink); border-radius: 10px; }
+  #wordDisplay::-webkit-scrollbar-thumb { background: var(--vp-pink); border-radius: 10px; }
 
-  /* Following Caret Logic [3, 4, 5] */
- .char { position: relative; transition: 0.1s; border-bottom: 2px solid transparent; }
- .char.active { color: white; background: rgba(255, 51, 204, 0.2); }
- .char.active::after {
+.char { position: relative; transition: 0.1s; border-bottom: 2px solid transparent; }
+.char.active { color: white; background: rgba(255, 113, 206, 0.2); }
+.char.active::after {
     content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 3px;
-    background: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink);
+    background: var(--vp-cyan); box-shadow: 0 0 15px var(--vp-cyan);
   }
- .char.correct { color: var(--electric-blue); text-shadow: 0 0 10px var(--electric-blue); }
- .char.incorrect { color: var(--neon-pink); background: rgba(255, 51, 204, 0.1); border-bottom: 2px solid var(--neon-pink); }
+.char.correct { color: white; opacity: 1; text-shadow: 0 0 8px var(--vp-blue); }
+.char.incorrect { color: #ff0000; background: rgba(255, 0, 0, 0.15); border-bottom: 2px solid #ff0000; }
 
-  #hiddenInput { position: absolute; opacity: 0; pointer-events: none; }
+  #hiddenInput { position: absolute; opacity: 0; pointer-events: none; top: -100px; }
 
-  /* Results Overlay Card [6, 7] */
- .results-overlay {
+  /* HUD TERMINATION OVERLAY */
+.results-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 0, 31, 0.98);
+    background: rgba(26, 0, 51, 0.98);
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 30px;
-    z-index: 50;
+    border-radius: 25px;
+    z-index: 100;
   }
 
- .wpm-result {
-    font-size: 8rem;
+.wpm-final {
+    font-size: 10rem;
     font-weight: 900;
-    color: var(--neon-pink);
-    text-shadow: 0 0 40px var(--neon-pink);
+    color: var(--vp-pink);
+    text-shadow: 5px 5px 0px var(--vp-blue);
     margin: 0;
+    line-height: 1;
   }
 
- .main-btn {
+.action-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+.btn-vapor {
     background: transparent;
-    border: 2px solid var(--electric-blue);
-    color: var(--electric-blue);
-    padding: 15px 40px;
+    border: 2px solid var(--vp-blue);
+    color: var(--vp-blue);
+    padding: 18px 50px;
     border-radius: 50px;
     cursor: pointer;
     text-transform: uppercase;
-    font-weight: bold;
-    margin: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
     transition: 0.3s;
   }
- .main-btn:hover { background: var(--electric-blue); color: var(--dark-navy); transform: scale(1.05); }
- .btn-telegram { border-color: #0088cc; color: #0088cc; }
- .btn-telegram:hover { background: #0088cc; color: white; }
+.btn-vapor:hover { background: var(--vp-blue); color: var(--vp-dark); box-shadow: 0 0 25px var(--vp-blue); }
+
+.btn-broadcast { border-color: #0088cc; color: #0088cc; }
+.btn-broadcast:hover { background: #0088cc; color: white; }
 
 </style>
 </head>
 <body>
 
-<div class="bg-grid"></div>
-<div class="scanlines"></div>
+<div class="sky"></div>
+<div class="sun"></div>
+<div class="grid-floor"></div>
 
 <div class="main-layout">
-  <div class="branding-wrapper">
+  <div class="branding">
     <h1 class="main-title">Electronic Typing</h1>
     <div class="credit-text">by mrpanha</div>
   </div>
@@ -251,41 +268,41 @@
   <div class="bento-container">
     <div class="stats-hud">
       <div class="stat-card">
-        <span class="stat-label">System Time</span>
-        <span id="timer" class="stat-value">0S</span>
+        <span class="stat-lbl">Uplink Time</span>
+        <span id="timer" class="stat-val">0S</span>
       </div>
       <div class="stat-card">
-        <span class="stat-label">Neural Accuracy</span>
-        <span id="accuracyLive" class="stat-value">100%</span>
+        <span class="stat-lbl">Neural Sync</span>
+        <span id="accuracyLive" class="stat-val">100%</span>
       </div>
     </div>
 
-    <div class="level-selector">
-      <button class="lvl-btn active" onclick="changeLevel('easy', this)">Node: Easy</button>
-      <button class="lvl-btn" onclick="changeLevel('medium', this)">Node: Medium</button>
-      <button class="lvl-btn" onclick="changeLevel('hard', this)">Node: Hard</button>
-      <button class="lvl-btn" onclick="changeLevel('veryHard', this)">Node: Elite</button>
+    <div class="level-nav">
+      <button class="lvl-btn active" onclick="changeLevel('easy', this)">Level: 01</button>
+      <button class="lvl-btn" onclick="changeLevel('medium', this)">Level: 02</button>
+      <button class="lvl-btn" onclick="changeLevel('hard', this)">Level: 03</button>
+      <button class="lvl-btn" onclick="changeLevel('veryHard', this)">Level: Elite</button>
     </div>
 
-    <div id="wordDisplay">Initialising Link...</div>
+    <div id="wordDisplay">Establishing Connection...</div>
     <input type="text" id="hiddenInput" autocomplete="off" spellcheck="false" autofocus>
 
     <div class="results-overlay" id="resultsOverlay">
-      <span style="color: var(--electric-blue); letter-spacing: 5px;">UPLINK TERMINATED</span>
-      <h1 class="wpm-result" id="wpmResult">0</h1>
-      <p id="statsResult" style="color: var(--cyan-glow); letter-spacing: 2px;"></p>
-      <div style="display: flex;">
-        <button class="main-btn" onclick="resetGame()">Re-Initialize</button>
-        <button class="main-btn btn-telegram" onclick="shareTelegram()">Broadcast Result</button>
+      <span style="color: var(--vp-cyan); letter-spacing: 8px; font-weight: 900;">DATA STREAM TERMINATED</span>
+      <h1 class="wpm-final" id="wpmResult">0</h1>
+      <p id="statsResult" style="color: white; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;"></p>
+      <div class="action-group">
+        <button class="btn-vapor" onclick="resetGame()">Initialize Restart</button>
+        <button class="btn-vapor btn-broadcast" onclick="shareTelegram()">Broadcast Data</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// Rule E: Standardized word corpora [8, 9, 10]
+// Standardized corpora based on industrial frequency datasets [6]
 const levelConfig = {
-  easy: { words: ["the", "his", "was", "for", "are", "one", "had", "word", "but", "what", "some", "can", "out", "all", "up", "use", "your", "how", "said", "an", "she", "do", "if", "will", "way", "big"], count: 25, time: 60 },
+  easy: { words: ["the", "of", "to", "and", "a", "in", "is", "it", "you", "that", "he", "was", "for", "on", "are", "with", "as", "his", "they", "be", "at", "one", "have", "this", "from"], count: 25, time: 60 },
   medium: { words: ["system", "neural", "cyber", "grid", "data", "matrix", "core", "node", "access", "buffer", "stream", "packet", "proxy", "binary", "secure", "signal", "module", "logic", "flow", "unit", "sync", "link", "port", "disk", "chip"], count: 50, time: 110 },
   hard: { words: ["interface", "protocol", "encrypted", "mainframe", "velocity", "firewall", "terminal", "algorithm", "database", "sequence", "hardware", "software", "bandwidth", "frequency", "overload", "uplink", "bypass", "latency", "spectrum", "circuit", "decrypt", "backdoor", "payload", "compiler", "network"], count: 50, time: 110 },
   veryHard: { words: ["synchronization", "multidimensional", "cryptographic", "extraordinary", "vulnerability", "optimization", "infrastructure", "transmission", "parallelization", "authentication", "bioluminescence", "architecture", "decentralization", "neuroplasticity", "reconfiguration", "superconductivity", "microprocessor", "nanotechnology", "telecommunication", "interconnectivity"], count: 50, time: 110 }
@@ -307,8 +324,9 @@ function initWords() {
   const config = levelConfig[currentLevel];
   timeLeft = config.time;
   timerDisplay.innerText = timeLeft + "S";
-  for (let i = 0; i < config.count; i++) fullText += config.words[Math.floor(Math.random() * config.words.length)] + (i === config.count - 1? "" : " ");
-  
+  for (let i = 0; i < config.count; i++) {
+    fullText += config.words[Math.floor(Math.random() * config.words.length)] + (i === config.count - 1? "" : " ");
+  }
   fullText.split("").forEach(char => {
     const span = document.createElement("span");
     span.classList.add("char");
@@ -321,7 +339,7 @@ function initWords() {
 }
 
 function startTimer() {
-  startTime = performance.now(); // Rule C: Monotonic High-Res [11]
+  startTime = performance.now(); // High-resolution monotonic timing [1]
   timerId = setInterval(() => {
     timeLeft--;
     timerDisplay.innerText = timeLeft + "S";
@@ -329,41 +347,37 @@ function startTimer() {
   }, 1000);
 }
 
-// Rule I: Dual Side-Cannon Celebration
-function triggerSideCannons() {
+// Side-Cannon Confetti Logic
+function triggerCelebration() {
   const count = 200;
-  const defaults = { origin: { y: 0.7 }, zIndex: 1000 };
+  const defaults = { origin: { y: 0.8 }, zIndex: 1000 };
   function fire(particleRatio, opts) {
     confetti({...defaults,...opts, particleCount: Math.floor(count * particleRatio) });
   }
-  fire(0.25, { spread: 26, startVelocity: 55, origin: { x: 0, y: 0.85 }, angle: 60, colors: ['#FF33CC', '#00CCFF'] });
-  fire(0.25, { spread: 26, startVelocity: 55, origin: { x: 1, y: 0.85 }, angle: 120, colors: ['#FF33CC', '#00CCFF'] });
+  fire(0.25, { spread: 26, startVelocity: 60, origin: { x: 0 }, colors: ['#ff71ce', '#01cdfe'] });
+  fire(0.25, { spread: 26, startVelocity: 60, origin: { x: 1 }, colors: ['#ff71ce', '#01cdfe'] });
 }
 
 function endGame() {
   clearInterval(timerId);
   const timeInMinutes = (performance.now() - startTime) / 60000;
-  
-  // Standard Formula: (Characters Typed / 5) / Time
   const grossWPM = totalKeystrokes > 0? Math.round((totalKeystrokes / 5) / timeInMinutes) : 0;
   const accuracy = totalKeystrokes > 0? Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100) : 100;
   
   document.getElementById("wpmResult").innerText = grossWPM;
-  document.getElementById("statsResult").innerText = `SYSTEM ACCURACY: ${accuracy}% | DATA ERRORS: ${mistakes}`;
+  document.getElementById("statsResult").innerText = `Accuracy: ${accuracy}% | Errors: ${mistakes} | Node: ${currentLevel.toUpperCase()}`;
   resultsOverlay.style.display = "flex";
-  triggerSideCannons();
+  triggerCelebration();
 }
 
 hiddenInput.addEventListener("input", (e) => {
-  if (!e.isTrusted) return; // Anti-cheat measure [12]
+  if (!e.isTrusted) return; // Anti-cheat
   if (!testStarted) { testStarted = true; startTimer(); }
 
   const characters = wordDisplay.querySelectorAll(".char");
-  const typedValue = hiddenInput.value;
-  const typedChar = typedValue.charAt(typedValue.length - 1);
+  const typedChar = hiddenInput.value.slice(-1);
   const currentChar = characters[charIndex].innerText;
 
-  // Real-time character validation
   if (typedChar === currentChar) {
     characters[charIndex].classList.add("correct");
   } else {
@@ -374,23 +388,22 @@ hiddenInput.addEventListener("input", (e) => {
   characters[charIndex].classList.remove("active");
   charIndex++; totalKeystrokes++;
 
-  if (charIndex < charactersv.length) {
+  if (charIndex < characters.length) {
     const nextChar = characters[charIndex];
     nextChar.classList.add("active");
-    // Rule G: Auto-scroll
-    if (nextChar.offsetTop > (wordDisplay.scrollTop + wordDisplay.offsetHeight - 60)) {
-        wordDisplay.scrollTop = nextChar.offsetTop - 60;
+    // Auto-scroll logic [7]
+    if (nextChar.offsetTop > (wordDisplay.scrollTop + wordDisplay.offsetHeight - 80)) {
+        wordDisplay.scrollTop = nextChar.offsetTop - 80;
     }
   } else {
-    // Rule B: Early Termination [13]
-    endGame();
+    endGame(); // Early Termination Protocol 
   }
 
   accuracyDisplay.innerText = Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100) + "%";
-  hiddenInput.value = ""; // Keep buffer clear for per-char logic
+  hiddenInput.value = "";
 });
 
-// Rule F: Neural Data Distribution
+// Telegram API distribution
 function shareTelegram() {
   const wpm = document.getElementById("wpmResult").innerText;
   const acc = accuracyDisplay.innerText;
