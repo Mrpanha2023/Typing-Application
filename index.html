@@ -3,18 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyber-Typing Pro 2025</title>
-<meta property="og:title" content="Cyber-Typing Pro 2025" />
-<meta property="og:description" content="Test your neural uplink speed with instant early-termination results." />
-<meta property="og:image" content="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1200" />
+<title>Electronic Typing | by mrpanha</title>
+<meta property="og:title" content="Electronic Typing | Pro 2025" />
+<meta property="og:description" content="Cyber-Typing simulator with adaptive levels and instant results. Designed by mrpanha." />
+<meta property="og:image" content="https://media1.tenor.com/m/rN1f_v6m7m8AAAAC/cat-love.gif" />
 
 <style>
   :root {
-    --neon-pink: #FF33CC;     /* Bright accent */
-    --electric-blue: #00CCFF; /* Grid highlights */
-    --deep-purple: #26004D;   /* Background base */
-    --dark-navy: #0A001F;     /* Backdrop contrast */
-    --cyan-glow: #66FFFF;     /* Edge highlights */
+    --neon-pink: #FF33CC;
+    --neon-pink-15: rgba(255, 51, 204, 0.15); /* Rule H: 15% opacity branding glow */
+    --electric-blue: #00CCFF;
+    --deep-purple: #26004D;
+    --dark-navy: #0A001F;
+    --cyan-glow: #66FFFF;
     --text-dim: #a586ff;
   }
 
@@ -31,52 +32,122 @@
     background: linear-gradient(180deg, var(--dark-navy) 0%, var(--deep-purple) 100%);
   }
 
+  /* CELEBRATION GIFS - Rule I: Fixed on lateral-axis */
+.celebration-gif {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 260px;
+    z-index: 1;
+    display: none; /* Controlled by JS */
+    border-radius: 20px;
+    box-shadow: 0 0 30px var(--neon-pink-15);
+    border: 2px solid rgba(255, 51, 204, 0.3);
+  }
+  #gif-left { left: 4%; }
+  #gif-right { right: 4%; }
+
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Rule H: Visual Identity and Attribution */
+.branding-wrapper {
+    width: 850px;
+    margin-bottom: 20px;
+  }
+.main-title {
+    margin: 0;
+    font-size: 4rem;
+    color: var(--neon-pink);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    font-weight: 900;
+    text-shadow: 0 0 15px var(--neon-pink-15), 0 0 30px var(--neon-pink-15);
+  }
+.credit-text {
+    text-align: right;
+    font-size: 0.95rem;
+    color: var(--cyan-glow);
+    text-shadow: 0 0 5px var(--cyan-glow);
+    margin-top: -5px;
+    font-style: italic;
+    padding-right: 15px;
+  }
+
 .container {
-    width: 800px;
-    background: rgba(10, 0, 31, 0.8);
-    backdrop-filter: blur(10px);
+    width: 850px;
+    background: rgba(10, 0, 31, 0.85);
+    backdrop-filter: blur(15px);
     padding: 40px;
     border-radius: 20px;
     border: 2px solid var(--cyan-glow);
-    box-shadow: 0 0 20px var(--dark-navy), 0 0 40px rgba(102, 255, 255, 0.2);
+    box-shadow: 0 0 30px var(--dark-navy), 0 0 50px rgba(102, 255, 255, 0.15);
     position: relative;
-    cursor: text;
   }
 
 .header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     color: var(--electric-blue);
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 2px;
   }
 
+.level-selector {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 204, 255, 0.2);
+  }
+.lvl-btn {
+    background: transparent;
+    border: 1px solid var(--electric-blue);
+    color: var(--electric-blue);
+    padding: 6px 18px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+.lvl-btn:hover { box-shadow: 0 0 10px var(--electric-blue); }
+.lvl-btn.active {
+    background: var(--electric-blue);
+    color: var(--dark-navy);
+    box-shadow: 0 0 15px var(--electric-blue);
+    font-weight: bold;
+  }
+
+  /* Rule G: 200px Scrollable Area with Custom Neon Bar */
   #wordDisplay {
     font-size: 24px;
     line-height: 1.6;
-    height: 120px;
-    overflow: hidden;
+    height: 200px;
+    overflow-y: auto;
     text-align: left;
     user-select: none;
     margin-bottom: 20px;
     color: var(--text-dim);
     position: relative;
+    padding-right: 15px;
+    scroll-behavior: smooth;
   }
+  #wordDisplay::-webkit-scrollbar { width: 6px; }
+  #wordDisplay::-webkit-scrollbar-track { background: var(--dark-navy); border-radius: 10px; }
+  #wordDisplay::-webkit-scrollbar-thumb { background: var(--electric-blue); border-radius: 10px; }
 
-.char {
-    position: relative;
-    transition: color 0.1s ease;
-  }
-
-.char.active {
-    color: white;
-    background: rgba(255, 51, 204, 0.3);
-    border-radius: 2px;
-  }
-
+.char { position: relative; transition: color 0.1s ease; }
+.char.active { color: white; background: rgba(255, 51, 204, 0.2); }
 .char.active::after {
     content: '';
     position: absolute;
@@ -88,23 +159,10 @@
     box-shadow: 0 0 10px var(--neon-pink);
     animation: blink 1s infinite;
   }
+.char.correct { color: var(--electric-blue); text-shadow: 0 0 8px var(--electric-blue); }
+.char.incorrect { color: var(--neon-pink); text-decoration: underline; text-shadow: 0 0 8px var(--neon-pink); }
 
-.char.correct {
-    color: var(--electric-blue);
-    text-shadow: 0 0 8px var(--electric-blue);
-  }
-
-.char.incorrect {
-    color: var(--neon-pink);
-    text-decoration: underline;
-    text-shadow: 0 0 8px var(--neon-pink);
-  }
-
-  #hiddenInput {
-    position: absolute;
-    top: -1000px;
-    opacity: 0;
-  }
+  #hiddenInput { position: absolute; top: -1000px; opacity: 0; }
 
 .results-overlay {
     position: absolute;
@@ -120,88 +178,91 @@
     border-radius: 18px;
     z-index: 10;
   }
+.wpm-large { font-size: 5.5rem; color: var(--neon-pink); text-shadow: 0 0 30px var(--neon-pink); margin: 0; }
 
-.wpm-large {
-    font-size: 5rem;
-    color: var(--neon-pink);
-    text-shadow: 0 0 30px var(--neon-pink);
-    margin: 0;
-  }
-
- .share-group {
-    margin-top: 20px;
-    display: flex;
-    gap: 15px;
-  }
-
-  button {
+.main-btn {
     background: transparent;
     border: 2px solid var(--electric-blue);
     color: var(--electric-blue);
-    padding: 10px 20px;
+    padding: 12px 30px;
     cursor: pointer;
-    font-size: 0.9rem;
     text-transform: uppercase;
+    font-weight: bold;
     transition: 0.3s;
   }
+.main-btn:hover { background: var(--electric-blue); color: var(--dark-navy); box-shadow: 0 0 20px var(--electric-blue); }
+.btn-telegram { border-color: #0088cc; color: #0088cc; }
+.btn-telegram:hover { background: #0088cc; color: white; box-shadow: 0 0 20px #0088cc; }
 
-  button:hover {
-    background: var(--electric-blue);
-    color: var(--dark-navy);
-    box-shadow: 0 0 20px var(--electric-blue);
-  }
-
-.btn-share {
-    border-color: var(--neon-pink);
-    color: var(--neon-pink);
-  }
-
-.btn-share:hover {
-    background: var(--neon-pink);
-    color: white;
-    box-shadow: 0 0 20px var(--neon-pink);
-  }
-
-  @keyframes blink {
-    50% { opacity: 0; }
-  }
+  @keyframes blink { 50% { opacity: 0; } }
 </style>
 </head>
 <body>
 
-<div class="container" id="gameContainer">
-  <div class="header">
-    <div>SYSTEM: <span id="timer">60</span>S</div>
-    <div>ACCURACY: <span id="accuracyLive">100</span>%</div>
+<img id="gif-left" class="celebration-gif" src="https://media1.tenor.com/m/rN1f_v6m7m8AAAAC/cat-love.gif" alt="termination heart cat left">
+<img id="gif-right" class="celebration-gif" src="https://media1.tenor.com/m/rN1f_v6m7m8AAAAC/cat-love.gif" alt="termination heart cat right">
+
+<div class="main-layout">
+  <div class="branding-wrapper">
+    <h1 class="main-title">Electronic Typing</h1>
+    <div class="credit-text">by mrpanha</div>
   </div>
 
-  <div id="wordDisplay">Establishing Connection...</div>
-  <input type="text" id="hiddenInput" autocomplete="off" spellcheck="false">
+  <div class="container" id="gameContainer">
+    <div class="header">
+      <div>SYSTEM: <span id="timer">0</span>S</div>
+      <div>ACCURACY: <span id="accuracyLive">100</span>%</div>
+    </div>
 
-  <div class="results-overlay" id="resultsOverlay">
-    <span id="finishMethod" style="color: var(--cyan-glow); letter-spacing: 5px;">DATA UPLOAD COMPLETE</span>
-    <h1 class="wpm-large" id="wpmResult">0</h1>
-    <p id="statsResult"></p>
-    
-    <div class="share-group">
-      <button onclick="resetGame()">Restart</button>
-      <button class="btn-share" onclick="shareX()">Share on X</button>
-      <button class="btn-share" onclick="copyResults()">Copy Data</button>
+    <div class="level-selector">
+      <button class="lvl-btn active" onclick="changeLevel('easy', this)">Easy</button>
+      <button class="lvl-btn" onclick="changeLevel('medium', this)">Medium</button>
+      <button class="lvl-btn" onclick="changeLevel('hard', this)">Hard</button>
+      <button class="lvl-btn" onclick="changeLevel('veryHard', this)">Very Hard</button>
+    </div>
+
+    <div id="wordDisplay">Initialising Neural Interface...</div>
+    <input type="text" id="hiddenInput" autocomplete="off" spellcheck="false" autofocus>
+
+    <div class="results-overlay" id="resultsOverlay">
+      <span id="finishMethod" style="color: var(--cyan-glow); letter-spacing: 5px;">SEQUENCE TERMINATED</span>
+      <h1 class="wpm-large" id="wpmResult">0</h1>
+      <p id="statsResult" style="font-size: 1.2rem; color: var(--text-dim);"></p>
+      <div style="margin-top: 30px; display: flex; gap: 20px;">
+        <button class="main-btn" onclick="resetGame()">Restart Uplink</button>
+        <button class="main-btn btn-telegram" onclick="shareTelegram()">Share to Telegram</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-const wordsArray = ["system", "neural", "interface", "protocol", "cyber", "grid", "network", "access", "bypass", "encrypted", "uplink", "mainframe", "data", "stream", "signal", "buffer", "matrix", "overload", "phantom", "velocity", "core"];
+// Rule E: Adaptive Level Configuration
+const levelConfig = {
+  easy: { words: ["the", "his", "was", "for", "are", "one", "had", "word", "but", "what", "some", "can", "out", "all", "up", "use", "your", "how", "said", "an", "she", "do", "if", "will", "way"], count: 25, time: 60 },
+  medium: { words: ["system", "neural", "cyber", "grid", "data", "matrix", "core", "node", "access", "buffer", "stream", "packet", "proxy", "binary", "secure", "signal", "module", "logic", "flow", "unit", "sync", "link", "port", "disk", "chip"], count: 50, time: 110 },
+  hard: { words: ["interface", "protocol", "encrypted", "mainframe", "velocity", "firewall", "terminal", "algorithm", "database", "sequence", "hardware", "software", "bandwidth", "frequency", "overload", "uplink", "bypass", "latency", "spectrum", "circuit", "decrypt", "backdoor", "payload", "compiler", "network"], count: 50, time: 110 },
+  veryHard: { words: ["synchronization", "multidimensional", "cryptographic", "extraordinary", "vulnerability", "optimization", "infrastructure", "transmission", "parallelization", "authentication", "bioluminescence", "architecture", "decentralization", "neuroplasticity", "reconfiguration", "superconductivity", "microprocessor", "nanotechnology", "telecommunication", "interconnectivity"], count: 50, time: 110 }
+};
 
-let timeLeft = 60, timerId = null, testStarted = false, charIndex = 0, mistakes = 0, totalKeystrokes = 0, startTime = 0;
+let currentLevel = 'easy', timeLeft, timerId = null, testStarted = false, charIndex = 0, mistakes = 0, totalKeystrokes = 0, startTime = 0;
 const wordDisplay = document.getElementById("wordDisplay"), hiddenInput = document.getElementById("hiddenInput"), timerDisplay = document.getElementById("timer"), accuracyDisplay = document.getElementById("accuracyLive"), resultsOverlay = document.getElementById("resultsOverlay");
+const leftGif = document.getElementById("gif-left"), rightGif = document.getElementById("gif-right");
+
+function changeLevel(level, btn) {
+  currentLevel = level;
+  document.querySelectorAll('.lvl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  resetGame();
+}
 
 function initWords() {
   wordDisplay.innerHTML = "";
   let fullText = "";
-  // Test length: 20 random words
-  for (let i = 0; i < 20; i++) fullText += wordsArray[Math.floor(Math.random() * wordsArray.length)] + (i === 19? "" : " ");
+  const config = levelConfig[currentLevel];
+  timeLeft = config.time;
+  timerDisplay.innerText = timeLeft;
+  for (let i = 0; i < config.count; i++) fullText += config.words[Math.floor(Math.random() * config.words.length)] + (i === config.count - 1? "" : " ");
   
   fullText.split("").forEach(char => {
     const span = document.createElement("span");
@@ -210,36 +271,40 @@ function initWords() {
     wordDisplay.appendChild(span);
   });
   wordDisplay.querySelector(".char").classList.add("active");
+  wordDisplay.scrollTop = 0;
   hiddenInput.focus();
 }
 
 function startTimer() {
-  startTime = performance.now(); // Monotonic clock starts [6]
+  startTime = performance.now(); // High-precision monotonic clock
   timerId = setInterval(() => {
     timeLeft--;
     timerDisplay.innerText = timeLeft;
-    if (timeLeft <= 0) endGame("TIME EXPIRED");
+    if (timeLeft <= 0) endGame("TIME EXPIRED"); // Show GIFs on fail
   }, 1000);
 }
 
 function endGame(method = "SEQUENCE COMPLETE") {
   clearInterval(timerId);
-  const endTime = performance.now();
-  const timeInMinutes = (endTime - startTime) / 60000;
+  const timeInMinutes = (performance.now() - startTime) / 60000;
   
-  // High-precision WPM normalized to actual time elapsed 
+  // Standard WPM = (Total Keystrokes / 5) / Time
   const grossWPM = totalKeystrokes > 0? Math.round((totalKeystrokes / 5) / timeInMinutes) : 0;
   const accuracy = totalKeystrokes > 0? Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100) : 100;
   
   document.getElementById("finishMethod").innerText = method;
   document.getElementById("wpmResult").innerText = grossWPM + " WPM";
-  document.getElementById("statsResult").innerText = `ACCURACY: ${accuracy}% | MISTAKES: ${mistakes}`;
+  document.getElementById("statsResult").innerText = `LVL: ${currentLevel.toUpperCase()} | ACCURACY: ${accuracy}% | ERRORS: ${mistakes}`;
   resultsOverlay.style.display = "flex";
+  
+  // Rule I: Achievement celebration triggered on any termination
+  leftGif.style.display = "block";
+  rightGif.style.display = "block";
   hiddenInput.blur();
 }
 
 hiddenInput.addEventListener("input", (e) => {
-  if (!e.isTrusted) return; // Anti-bot check [9]
+  if (!e.isTrusted) return; // Anti-bot verify
   if (!testStarted) { testStarted = true; startTimer(); }
 
   const characters = wordDisplay.querySelectorAll(".char");
@@ -254,50 +319,45 @@ hiddenInput.addEventListener("input", (e) => {
   }
 
   characters[charIndex].classList.remove("active");
-  charIndex++; 
-  totalKeystrokes++;
+  charIndex++; totalKeystrokes++;
 
-  // INSTANT FINISH LOGIC: Check if this was the last character
+  // Rule G: Auto-scrolling to keep eye-line
   if (charIndex < characters.length) {
-    characters[charIndex].classList.add("active");
+    const nextChar = characters[charIndex];
+    nextChar.classList.add("active");
+    if (nextChar.offsetTop > (wordDisplay.scrollTop + wordDisplay.offsetHeight - 60)) {
+        wordDisplay.scrollTop = nextChar.offsetTop - 60;
+    }
   } else {
-    endGame("UPLINK SUCCESSFUL"); // Rule B: Immediate finish
+    // Rule B: Early Result Termination
+    endGame("UPLINK SUCCESSFUL"); // Show GIFs on success
   }
 
   accuracyDisplay.innerText = Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100);
   hiddenInput.value = "";
 });
 
-function getShareText() {
+function shareTelegram() {
   const wpm = document.getElementById("wpmResult").innerText;
   const acc = document.getElementById("accuracyLive").innerText;
-  return `Neural Uplink Speed: ${wpm} | Accuracy: ${acc}%! Can you beat me in Cyber-Typing 2025? ⌨️✨`;
-}
-
-function shareX() {
-  const text = encodeURIComponent(getShareText());
-  const url = encodeURIComponent(window.location.href);
-  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-}
-
-async function copyResults() {
-  try {
-    await navigator.clipboard.writeText(getShareText());
-    alert("Neural results copied to clipboard!");
-  } catch (err) {
-    console.error("Failed to copy", err);
-  }
+  const text = encodeURIComponent(`My Electronic Typing Speed [${currentLevel.toUpperCase()}]: ${wpm} with ${acc}% accuracy! ⌨️🚀 by mrpanha`);
+  window.open(`https://t.me/share/url?url=${window.location.href}&text=${text}`, '_blank');
 }
 
 function resetGame() {
-  timeLeft = 60; charIndex = 0; mistakes = 0; totalKeystrokes = 0; testStarted = false;
+  clearInterval(timerId);
+  charIndex = 0; mistakes = 0; totalKeystrokes = 0; testStarted = false;
   resultsOverlay.style.display = "none";
-  timerDisplay.innerText = timeLeft;
+  leftGif.style.display = "none";
+  rightGif.style.display = "none";
   accuracyDisplay.innerText = "100";
   initWords();
 }
 
-document.addEventListener("click", () => { if(resultsOverlay.style.display!== "flex") hiddenInput.focus(); });
+document.addEventListener("click", () => {
+    if(resultsOverlay.style.display!== "flex") hiddenInput.focus();
+});
+
 window.onload = initWords;
 </script>
 </body>
