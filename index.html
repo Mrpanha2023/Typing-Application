@@ -4,14 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Electronic Typing | by mrpanha</title>
+
 <meta property="og:title" content="Electronic Typing | Pro 2025" />
-<meta property="og:description" content="Cyber-Typing simulator with adaptive levels and instant results. Designed by mrpanha." />
-<meta property="og:image" content="https://media1.tenor.com/m/rN1f_v6m7m8AAAAC/cat-love.gif" />
+<meta property="og:description" content="High-performance typing simulator with adaptive levels. Designed by mrpanha." />
+<meta property="og:type" content="website" />
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
   :root {
     --neon-pink: #FF33CC;
-    --neon-pink-15: rgba(255, 51, 204, 0.15); /* Rule H: 15% opacity branding glow */
+    --neon-pink-15: rgba(255, 51, 204, 0.15); /* Rule H: 15% branding glow */
     --electric-blue: #00CCFF;
     --deep-purple: #26004D;
     --dark-navy: #0A001F;
@@ -32,34 +35,20 @@
     background: linear-gradient(180deg, var(--dark-navy) 0%, var(--deep-purple) 100%);
   }
 
-  /* CELEBRATION GIFS - Rule I: Fixed on lateral-axis */
-.celebration-gif {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 260px;
-    z-index: 1;
-    display: none; /* Controlled by JS */
-    border-radius: 20px;
-    box-shadow: 0 0 30px var(--neon-pink-15);
-    border: 2px solid rgba(255, 51, 204, 0.3);
-  }
-  #gif-left { left: 4%; }
-  #gif-right { right: 4%; }
-
+  /* Rule H: Visual Identity and Attribution */
 .main-layout {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    z-index: 2;
+    z-index: 10;
   }
 
-  /* Rule H: Visual Identity and Attribution */
 .branding-wrapper {
     width: 850px;
     margin-bottom: 20px;
   }
+
 .main-title {
     margin: 0;
     font-size: 4rem;
@@ -68,8 +57,10 @@
     text-transform: uppercase;
     letter-spacing: 6px;
     font-weight: 900;
+    /* Soft 15% opacity glow shadow */
     text-shadow: 0 0 15px var(--neon-pink-15), 0 0 30px var(--neon-pink-15);
   }
+
 .credit-text {
     text-align: right;
     font-size: 0.95rem;
@@ -82,7 +73,7 @@
 
 .container {
     width: 850px;
-    background: rgba(10, 0, 31, 0.85);
+    background: rgba(10, 0, 31, 0.9);
     backdrop-filter: blur(15px);
     padding: 40px;
     border-radius: 20px;
@@ -110,6 +101,7 @@
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(0, 204, 255, 0.2);
   }
+
 .lvl-btn {
     background: transparent;
     border: 1px solid var(--electric-blue);
@@ -120,7 +112,9 @@
     cursor: pointer;
     transition: 0.3s ease;
   }
+
 .lvl-btn:hover { box-shadow: 0 0 10px var(--electric-blue); }
+
 .lvl-btn.active {
     background: var(--electric-blue);
     color: var(--dark-navy);
@@ -128,7 +122,7 @@
     font-weight: bold;
   }
 
-  /* Rule G: 200px Scrollable Area with Custom Neon Bar */
+  /* Rule G: Viewport Adaptation - 200px height with scrolling */
   #wordDisplay {
     font-size: 24px;
     line-height: 1.6;
@@ -142,6 +136,8 @@
     padding-right: 15px;
     scroll-behavior: smooth;
   }
+
+  /* Custom Neon Scrollbar */
   #wordDisplay::-webkit-scrollbar { width: 6px; }
   #wordDisplay::-webkit-scrollbar-track { background: var(--dark-navy); border-radius: 10px; }
   #wordDisplay::-webkit-scrollbar-thumb { background: var(--electric-blue); border-radius: 10px; }
@@ -176,8 +172,9 @@
     justify-content: center;
     align-items: center;
     border-radius: 18px;
-    z-index: 10;
+    z-index: 50; /* Rule J: Ensuring high layer priority */
   }
+
 .wpm-large { font-size: 5.5rem; color: var(--neon-pink); text-shadow: 0 0 30px var(--neon-pink); margin: 0; }
 
 .main-btn {
@@ -190,6 +187,7 @@
     font-weight: bold;
     transition: 0.3s;
   }
+
 .main-btn:hover { background: var(--electric-blue); color: var(--dark-navy); box-shadow: 0 0 20px var(--electric-blue); }
 .btn-telegram { border-color: #0088cc; color: #0088cc; }
 .btn-telegram:hover { background: #0088cc; color: white; box-shadow: 0 0 20px #0088cc; }
@@ -198,9 +196,6 @@
 </style>
 </head>
 <body>
-
-<img id="gif-left" class="celebration-gif" src="https://media1.tenor.com/m/rN1f_v6m7m8AAAAC/cat-love.gif" alt="termination heart cat left">
-<img id="gif-right" class="celebration-gif" src="https://media1.tenor.com/m/rN1f_v6m7m8AAAAC/cat-love.gif" alt="termination heart cat right">
 
 <div class="main-layout">
   <div class="branding-wrapper">
@@ -221,7 +216,7 @@
       <button class="lvl-btn" onclick="changeLevel('veryHard', this)">Very Hard</button>
     </div>
 
-    <div id="wordDisplay">Initialising Neural Interface...</div>
+    <div id="wordDisplay">Establishing Connection...</div>
     <input type="text" id="hiddenInput" autocomplete="off" spellcheck="false" autofocus>
 
     <div class="results-overlay" id="resultsOverlay">
@@ -237,9 +232,9 @@
 </div>
 
 <script>
-// Rule E: Adaptive Level Configuration
+// Rule E: Progressive Complexity word corpora
 const levelConfig = {
-  easy: { words: ["the", "his", "was", "for", "are", "one", "had", "word", "but", "what", "some", "can", "out", "all", "up", "use", "your", "how", "said", "an", "she", "do", "if", "will", "way"], count: 25, time: 60 },
+  easy: { words: ["the", "his", "was", "for", "are", "one", "had", "word", "but", "what", "some", "can", "out", "all", "up", "use", "your", "how", "said", "an", "she", "do", "if", "will", "way", "big"], count: 25, time: 60 },
   medium: { words: ["system", "neural", "cyber", "grid", "data", "matrix", "core", "node", "access", "buffer", "stream", "packet", "proxy", "binary", "secure", "signal", "module", "logic", "flow", "unit", "sync", "link", "port", "disk", "chip"], count: 50, time: 110 },
   hard: { words: ["interface", "protocol", "encrypted", "mainframe", "velocity", "firewall", "terminal", "algorithm", "database", "sequence", "hardware", "software", "bandwidth", "frequency", "overload", "uplink", "bypass", "latency", "spectrum", "circuit", "decrypt", "backdoor", "payload", "compiler", "network"], count: 50, time: 110 },
   veryHard: { words: ["synchronization", "multidimensional", "cryptographic", "extraordinary", "vulnerability", "optimization", "infrastructure", "transmission", "parallelization", "authentication", "bioluminescence", "architecture", "decentralization", "neuroplasticity", "reconfiguration", "superconductivity", "microprocessor", "nanotechnology", "telecommunication", "interconnectivity"], count: 50, time: 110 }
@@ -247,7 +242,6 @@ const levelConfig = {
 
 let currentLevel = 'easy', timeLeft, timerId = null, testStarted = false, charIndex = 0, mistakes = 0, totalKeystrokes = 0, startTime = 0;
 const wordDisplay = document.getElementById("wordDisplay"), hiddenInput = document.getElementById("hiddenInput"), timerDisplay = document.getElementById("timer"), accuracyDisplay = document.getElementById("accuracyLive"), resultsOverlay = document.getElementById("resultsOverlay");
-const leftGif = document.getElementById("gif-left"), rightGif = document.getElementById("gif-right");
 
 function changeLevel(level, btn) {
   currentLevel = level;
@@ -276,19 +270,38 @@ function initWords() {
 }
 
 function startTimer() {
-  startTime = performance.now(); // High-precision monotonic clock
+  startTime = performance.now(); 
   timerId = setInterval(() => {
     timeLeft--;
     timerDisplay.innerText = timeLeft;
-    if (timeLeft <= 0) endGame("TIME EXPIRED"); // Show GIFs on fail
+    if (timeLeft <= 0) endGame("TIME EXPIRED"); 
   }, 1000);
+}
+
+// Rule I: Celebration Animation Logic (Hardware Accelerated Particles)
+function triggerSideCannons() {
+  const count = 200;
+  const defaults = { origin: { y: 0.7 }, zIndex: 1000 };
+
+  function fire(particleRatio, opts) {
+    confetti({
+     ...defaults,
+     ...opts,
+      particleCount: Math.floor(count * particleRatio)
+    });
+  }
+
+  // Left Cannon
+  fire(0.25, { spread: 26, startVelocity: 55, origin: { x: 0, y: 0.8 }, angle: 60, colors: ['#FF33CC', '#00CCFF'] });
+  // Right Cannon
+  fire(0.25, { spread: 26, startVelocity: 55, origin: { x: 1, y: 0.8 }, angle: 120, colors: ['#FF33CC', '#00CCFF'] });
 }
 
 function endGame(method = "SEQUENCE COMPLETE") {
   clearInterval(timerId);
   const timeInMinutes = (performance.now() - startTime) / 60000;
   
-  // Standard WPM = (Total Keystrokes / 5) / Time
+  // Standard WPM formula: (Total strokes / 5) / Time [1]
   const grossWPM = totalKeystrokes > 0? Math.round((totalKeystrokes / 5) / timeInMinutes) : 0;
   const accuracy = totalKeystrokes > 0? Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100) : 100;
   
@@ -297,14 +310,13 @@ function endGame(method = "SEQUENCE COMPLETE") {
   document.getElementById("statsResult").innerText = `LVL: ${currentLevel.toUpperCase()} | ACCURACY: ${accuracy}% | ERRORS: ${mistakes}`;
   resultsOverlay.style.display = "flex";
   
-  // Rule I: Achievement celebration triggered on any termination
-  leftGif.style.display = "block";
-  rightGif.style.display = "block";
+  // Rule I: Trigger animation every time a test ends
+  triggerSideCannons();
   hiddenInput.blur();
 }
 
 hiddenInput.addEventListener("input", (e) => {
-  if (!e.isTrusted) return; // Anti-bot verify
+  if (!e.isTrusted) return; 
   if (!testStarted) { testStarted = true; startTimer(); }
 
   const characters = wordDisplay.querySelectorAll(".char");
@@ -321,7 +333,7 @@ hiddenInput.addEventListener("input", (e) => {
   characters[charIndex].classList.remove("active");
   charIndex++; totalKeystrokes++;
 
-  // Rule G: Auto-scrolling to keep eye-line
+  // Rule G: Auto-scrolling viewport logic [2]
   if (charIndex < characters.length) {
     const nextChar = characters[charIndex];
     nextChar.classList.add("active");
@@ -329,8 +341,8 @@ hiddenInput.addEventListener("input", (e) => {
         wordDisplay.scrollTop = nextChar.offsetTop - 60;
     }
   } else {
-    // Rule B: Early Result Termination
-    endGame("UPLINK SUCCESSFUL"); // Show GIFs on success
+    // Rule B: Early termination [3]
+    endGame("UPLINK SUCCESSFUL");
   }
 
   accuracyDisplay.innerText = Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100);
@@ -348,8 +360,6 @@ function resetGame() {
   clearInterval(timerId);
   charIndex = 0; mistakes = 0; totalKeystrokes = 0; testStarted = false;
   resultsOverlay.style.display = "none";
-  leftGif.style.display = "none";
-  rightGif.style.display = "none";
   accuracyDisplay.innerText = "100";
   initWords();
 }
