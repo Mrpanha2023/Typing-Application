@@ -13,7 +13,7 @@
 
 <style>
   :root {
-    --vp-pink: #00e1ff;
+    --vp-pink: #00b3ca;
     --vp-pink-15: rgba(255, 113, 206, 0.15); /* 15% Branding Glow */
     --vp-blue: #01cdfe;
     --vp-cyan: #e6ff05;
@@ -194,7 +194,7 @@
   }
 
   #wordDisplay::-webkit-scrollbar { width: 4px; }
-  #wordDisplay::-webkit-scrollbar-thumb { background: var(--vp-pink); border-radius: 10px; }
+  #wordDisplay::-webkit-scrollbar-thumb { background: var(--vp-pink); border-radius: 0px; }
 
 .char { position: relative; transition: 0.1s; border-bottom: 2px solid transparent; }
 .char.active { color: white; background: rgba(255, 113, 206, 0.2); }
@@ -389,16 +389,32 @@ hiddenInput.addEventListener("input", (e) => {
   characters[charIndex].classList.remove("active");
   charIndex++; totalKeystrokes++;
 
-  if (charIndex < characters.length) {
+// Replacement logic for high-stability scrolling
+if (charIndex < characters.length) {
     const nextChar = characters[charIndex];
     nextChar.classList.add("active");
-    // Auto-scroll logic [7]
-    if (nextChar.offsetTop > (wordDisplay.scrollTop + wordDisplay.offsetHeight - 80)) {
-        wordDisplay.scrollTop = nextChar.offsetTop - 80;
-    }
-  } else {
-    endGame(); // Early Termination Protocol 
-  }
+
+    // Auto-scroll logic 
+if (nextChar.offsetTop > (wordDisplay.scrollTop + wordDisplay.offsetHeight - 80)) {
+    wordDisplay.scrollTop = nextChar.offsetTop - 80;
+}
+    // Discrete line-feed: only moves when nextChar is obscured
+    nextChar.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest'
+    });
+}
+
+if (charIndex < characters.length) {
+    const nextChar = characters[charIndex];
+    nextChar.classList.add("active");
+
+    // Optimized discrete scrolling: only moves when nextChar is obscured
+    nextChar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+} else {
+    endGame(); 
+}
 
   accuracyDisplay.innerText = Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100) + "%";
   hiddenInput.value = "";
