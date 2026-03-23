@@ -13,20 +13,20 @@
 
 <style>
   :root {
-    --vp-pink: #ff71ce;
+    --vp-pink: #00e1ff;
     --vp-pink-15: rgba(255, 113, 206, 0.15); /* 15% Branding Glow */
     --vp-blue: #01cdfe;
-    --vp-cyan: #05ffa1;
+    --vp-cyan: #e6ff05;
     --vp-purple: #b967ff;
     --vp-dark: #1a0033;
-    --glass: rgba(26, 0, 51, 0.85);
+    --glass: rgba(19, 3, 32, 0.85);
   }
 
   * { box-sizing: border-box; }
 
   body {
     background-color: var(--vp-dark);
-    color: white;
+    color: rgb(0, 204, 255);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     overflow: hidden;
@@ -41,7 +41,7 @@
 .sky {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, #1a0033 0%, #4a0080 50%, #ff71ce 100%);
+    background: linear-gradient(to bottom, #04003a 0%, #013a8f 40%, #0084ff 70%, #050020 100%);
     z-index: -3;
   }
 
@@ -50,7 +50,7 @@
     top: 35%; left: 50%;
     transform: translate(-50%, -50%);
     width: 380px; height: 380px;
-    background: linear-gradient(to bottom, #ffea00 0%, #ff71ce 100%);
+    background: linear-gradient(to bottom, #e6efff 0%, #00ccff 100%);
     border-radius: 50%;
     box-shadow: 0 0 100px rgba(255, 113, 206, 0.5);
     z-index: -2;
@@ -66,8 +66,8 @@
     position: fixed;
     bottom: -150px; left: -50%; width: 200%; height: 60%;
     background-image: 
-      linear-gradient(transparent 0%, var(--vp-blue) 1px, transparent 1px),
-      linear-gradient(90deg, transparent 0%, var(--vp-blue) 1px, transparent 1px);
+      linear-gradient(transparent 0%, #fffb00 1px, transparent 1px), 
+      linear-gradient(90deg, transparent 0%, #fffb00 1px, transparent 1px);
     background-size: 60px 60px;
     transform: rotateX(60deg);
     z-index: -1;
@@ -105,15 +105,16 @@
 
 .credit-text {
     text-align: right;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: var(--vp-cyan);
-    margin-top: -12px;
-    padding-right: 40px;
-    letter-spacing: 4px;
+    margin-top: -1px;
+    padding-right: 67px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
     font-weight: bold;
     text-shadow: 0 0 10px var(--vp-cyan);
     font-style: italic;
-  }
+}
 
   /* HUD-BENTO GLASS INTERFACE */
 .bento-container {
@@ -222,11 +223,11 @@
 .wpm-final {
     font-size: 10rem;
     font-weight: 900;
-    color: var(--vp-pink);
-    text-shadow: 5px 5px 0px var(--vp-blue);
+    color: #fffb00;
+    text-shadow: 5px 5px 0px #013a8f;
     margin: 0;
     line-height: 1;
-  }
+}
 
 .action-group {
     display: flex;
@@ -248,7 +249,7 @@
   }
 .btn-vapor:hover { background: var(--vp-blue); color: var(--vp-dark); box-shadow: 0 0 25px var(--vp-blue); }
 
-.btn-broadcast { border-color: #0088cc; color: #0088cc; }
+.btn-broadcast { border-color: #00aaff; color: #0088cc; }
 .btn-broadcast:hover { background: #0088cc; color: white; }
 
 </style>
@@ -261,8 +262,8 @@
 
 <div class="main-layout">
   <div class="branding">
-    <h1 class="main-title">Electronic Typing</h1>
-    <div class="credit-text">by mrpanha</div>
+    <h1 class="main-title">FINGER'S MACHINE</h1>
+    <div class="credit-text">by K'JRUK</div>
   </div>
 
   <div class="bento-container">
