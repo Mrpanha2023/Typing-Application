@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber-Typing Pro 2025</title>
+<meta property="og:title" content="Cyber-Typing Pro 2025" />
+<meta property="og:description" content="Test your neural uplink speed with instant early-termination results." />
+<meta property="og:image" content="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1200" />
+
+<style>
+  :root {
+    --neon-pink: #FF33CC;     /* Bright accent */
+    --electric-blue: #00CCFF; /* Grid highlights */
+    --deep-purple: #26004D;   /* Background base */
+    --dark-navy: #0A001F;     /* Backdrop contrast */
+    --cyan-glow: #66FFFF;     /* Edge highlights */
+    --text-dim: #a586ff;
+  }
+
+  body {
+    background-color: var(--deep-purple);
+    color: white;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--dark-navy) 0%, var(--deep-purple) 100%);
+  }
+
+.container {
+    width: 800px;
+    background: rgba(10, 0, 31, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid var(--cyan-glow);
+    box-shadow: 0 0 20px var(--dark-navy), 0 0 40px rgba(102, 255, 255, 0.2);
+    position: relative;
+    cursor: text;
+  }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    color: var(--electric-blue);
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  #wordDisplay {
+    font-size: 24px;
+    line-height: 1.6;
+    height: 120px;
+    overflow: hidden;
+    text-align: left;
+    user-select: none;
+    margin-bottom: 20px;
+    color: var(--text-dim);
+    position: relative;
+  }
+
+.char {
+    position: relative;
+    transition: color 0.1s ease;
+  }
+
+.char.active {
+    color: white;
+    background: rgba(255, 51, 204, 0.3);
+    border-radius: 2px;
+  }
+
+.char.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+    animation: blink 1s infinite;
+  }
+
+.char.correct {
+    color: var(--electric-blue);
+    text-shadow: 0 0 8px var(--electric-blue);
+  }
+
+.char.incorrect {
+    color: var(--neon-pink);
+    text-decoration: underline;
+    text-shadow: 0 0 8px var(--neon-pink);
+  }
+
+  #hiddenInput {
+    position: absolute;
+    top: -1000px;
+    opacity: 0;
+  }
+
+.results-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dark-navy);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 18px;
+    z-index: 10;
+  }
+
+.wpm-large {
+    font-size: 5rem;
+    color: var(--neon-pink);
+    text-shadow: 0 0 30px var(--neon-pink);
+    margin: 0;
+  }
+
+ .share-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+  }
+
+  button {
+    background: transparent;
+    border: 2px solid var(--electric-blue);
+    color: var(--electric-blue);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: var(--electric-blue);
+    color: var(--dark-navy);
+    box-shadow: 0 0 20px var(--electric-blue);
+  }
+
+.btn-share {
+    border-color: var(--neon-pink);
+    color: var(--neon-pink);
+  }
+
+.btn-share:hover {
+    background: var(--neon-pink);
+    color: white;
+    box-shadow: 0 0 20px var(--neon-pink);
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="gameContainer">
+  <div class="header">
+    <div>SYSTEM: <span id="timer">60</span>S</div>
+    <div>ACCURACY: <span id="accuracyLive">100</span>%</div>
+  </div>
+
+  <div id="wordDisplay">Establishing Connection...</div>
+  <input type="text" id="hiddenInput" autocomplete="off" spellcheck="false">
+
+  <div class="results-overlay" id="resultsOverlay">
+    <span id="finishMethod" style="color: var(--cyan-glow); letter-spacing: 5px;">DATA UPLOAD COMPLETE</span>
+    <h1 class="wpm-large" id="wpmResult">0</h1>
+    <p id="statsResult"></p>
+    
+    <div class="share-group">
+      <button onclick="resetGame()">Restart</button>
+      <button class="btn-share" onclick="shareX()">Share on X</button>
+      <button class="btn-share" onclick="copyResults()">Copy Data</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const wordsArray = ["system", "neural", "interface", "protocol", "cyber", "grid", "network", "access", "bypass", "encrypted", "uplink", "mainframe", "data", "stream", "signal", "buffer", "matrix", "overload", "phantom", "velocity", "core"];
+
+let timeLeft = 60, timerId = null, testStarted = false, charIndex = 0, mistakes = 0, totalKeystrokes = 0, startTime = 0;
+const wordDisplay = document.getElementById("wordDisplay"), hiddenInput = document.getElementById("hiddenInput"), timerDisplay = document.getElementById("timer"), accuracyDisplay = document.getElementById("accuracyLive"), resultsOverlay = document.getElementById("resultsOverlay");
+
+function initWords() {
+  wordDisplay.innerHTML = "";
+  let fullText = "";
+  // Test length: 20 random words
+  for (let i = 0; i < 20; i++) fullText += wordsArray[Math.floor(Math.random() * wordsArray.length)] + (i === 19? "" : " ");
+  
+  fullText.split("").forEach(char => {
+    const span = document.createElement("span");
+    span.classList.add("char");
+    span.innerText = char;
+    wordDisplay.appendChild(span);
+  });
+  wordDisplay.querySelector(".char").classList.add("active");
+  hiddenInput.focus();
+}
+
+function startTimer() {
+  startTime = performance.now(); // Monotonic clock starts [6]
+  timerId = setInterval(() => {
+    timeLeft--;
+    timerDisplay.innerText = timeLeft;
+    if (timeLeft <= 0) endGame("TIME EXPIRED");
+  }, 1000);
+}
+
+function endGame(method = "SEQUENCE COMPLETE") {
+  clearInterval(timerId);
+  const endTime = performance.now();
+  const timeInMinutes = (endTime - startTime) / 60000;
+  
+  // High-precision WPM normalized to actual time elapsed 
+  const grossWPM = totalKeystrokes > 0? Math.round((totalKeystrokes / 5) / timeInMinutes) : 0;
+  const accuracy = totalKeystrokes > 0? Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100) : 100;
+  
+  document.getElementById("finishMethod").innerText = method;
+  document.getElementById("wpmResult").innerText = grossWPM + " WPM";
+  document.getElementById("statsResult").innerText = `ACCURACY: ${accuracy}% | MISTAKES: ${mistakes}`;
+  resultsOverlay.style.display = "flex";
+  hiddenInput.blur();
+}
+
+hiddenInput.addEventListener("input", (e) => {
+  if (!e.isTrusted) return; // Anti-bot check [9]
+  if (!testStarted) { testStarted = true; startTimer(); }
+
+  const characters = wordDisplay.querySelectorAll(".char");
+  const typedChar = hiddenInput.value.slice(-1);
+  const currentChar = characters[charIndex].innerText;
+
+  if (typedChar === currentChar) {
+    characters[charIndex].classList.add("correct");
+  } else {
+    characters[charIndex].classList.add("incorrect");
+    mistakes++;
+  }
+
+  characters[charIndex].classList.remove("active");
+  charIndex++; 
+  totalKeystrokes++;
+
+  // INSTANT FINISH LOGIC: Check if this was the last character
+  if (charIndex < characters.length) {
+    characters[charIndex].classList.add("active");
+  } else {
+    endGame("UPLINK SUCCESSFUL"); // Rule B: Immediate finish
+  }
+
+  accuracyDisplay.innerText = Math.round(((totalKeystrokes - mistakes) / totalKeystrokes) * 100);
+  hiddenInput.value = "";
+});
+
+function getShareText() {
+  const wpm = document.getElementById("wpmResult").innerText;
+  const acc = document.getElementById("accuracyLive").innerText;
+  return `Neural Uplink Speed: ${wpm} | Accuracy: ${acc}%! Can you beat me in Cyber-Typing 2025? ⌨️✨`;
+}
+
+function shareX() {
+  const text = encodeURIComponent(getShareText());
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+}
+
+async function copyResults() {
+  try {
+    await navigator.clipboard.writeText(getShareText());
+    alert("Neural results copied to clipboard!");
+  } catch (err) {
+    console.error("Failed to copy", err);
+  }
+}
+
+function resetGame() {
+  timeLeft = 60; charIndex = 0; mistakes = 0; totalKeystrokes = 0; testStarted = false;
+  resultsOverlay.style.display = "none";
+  timerDisplay.innerText = timeLeft;
+  accuracyDisplay.innerText = "100";
+  initWords();
+}
+
+document.addEventListener("click", () => { if(resultsOverlay.style.display!== "flex") hiddenInput.focus(); });
+window.onload = initWords;
+</script>
+</body>
+</html>
